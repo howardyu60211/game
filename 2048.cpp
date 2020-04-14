@@ -78,13 +78,18 @@ void newnum() {
     if (check == 1){
         srand((unsigned)time(NULL));
         while(1){
-            int all=rand()%16;
-            int x=all/4;
-            int y=all%4;
+            int all = rand() % 16;
+            int x = all / 4;
+            int y = all % 4;
             if (block[x][y] != 0) {
-                continue;
+            	continue;
             }else{
-                block[x][y]=2;
+            	int newadd = rand() % 10;
+            	if(newadd == 0){
+            		block[x][y] = 4;
+		}else{
+                	block[x][y] = 2;
+		}
             }
 	break;
         }

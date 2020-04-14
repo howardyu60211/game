@@ -297,7 +297,7 @@ int win(){
 	int full = 1;          // 0未滿 1滿 
 	for(int  x = 0; x < 4; x++){
 		for(int y = 0; y < 4; y++){
-			if(block[x][y] == 64){
+			if(block[x][y] == ){
 				return 0;
 			}
 		} 

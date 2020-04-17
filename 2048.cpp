@@ -82,14 +82,14 @@ void newnum() {
             int x = all / 4;
             int y = all % 4;
             if (block[x][y] != 0) {
-            	continue;
+                continue;
             }else{
             	int newadd = rand() % 10;
             	if(newadd == 0){
             		block[x][y] = 4;
-		}else{
+				}else{
                 	block[x][y] = 2;
-		}
+				}
             }
 	break;
         }
@@ -297,7 +297,7 @@ int win(){
 	int full = 1;          // 0未滿 1滿 
 	for(int  x = 0; x < 4; x++){
 		for(int y = 0; y < 4; y++){
-			if(block[x][y] == ){
+			if(block[x][y] == 2048){
 				return 0;
 			}
 		} 
@@ -309,6 +309,17 @@ int win(){
 			}
 		} 
 	}
+	for(int x = 0; x < 4; x++){
+		for(int y = 0; y < 4; y++){
+			if( x - 1 > 0 && block[x][y] == block[x - 1][y] ||
+				x + 1 < 4 && block[x][y] == block[x + 1][y] ||
+				y + 1 < 4 && block[x][y] == block[x][y + 1] ||
+				y - 1 > 0 && block[x][y] == block[x][y - 1]){
+				full = 0;
+				break;
+			}
+		}
+	} 
 	if(full == 1){
 		return 1;
 	}
@@ -320,7 +331,7 @@ void winfin(){
 }
 
 void losefin(){
-	cout << "\n Your lose, keep working\n Your grade is : " << point;
+	cout << "\n You'er lose, keep working\n Your grade is : " << point;
 }
 
 /*void gotoxy(int xpos, int ypos)

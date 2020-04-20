@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <iomanip>
+#include <windows.h>
+#include <algorithm>
 #define UP 72
 #define LEFT 75
 #define DOWN 80
@@ -28,8 +30,40 @@ void Align_display();        // 顯示+對齊
 int win();                 // 勝利判斷 
 bool restart();
 int judgment = 3;
+int bestpoint = 0;
+int besttime[2] = {10000, 0};
 int main(){
 	while(true){
+		system("cls");
+		cout << "========================Welcome to 2048========================\n";
+		cout << "                                                        ver 2.0\n\n";
+		cout << "           BUG：(2)速度為一以下時，無法重新開局。\n\n\n\n";
+		if(bestpoint == 0){
+			cout << "             	 	best point： X";
+		}else{
+			cout << "             	 	best point： " << bestpoint;
+		}
+		if(besttime[0] == 10000){
+			cout << "\n             	 	best time：  X";
+		}else{
+			cout << "\n             	 	best time：  " << besttime[0] << " 分 " << besttime[1] << " 秒"; 
+		}
+		cout << "\n\n            	 	please choose mode：\n\n";
+		cout << "      	   (1)normal (2)auto (3)auto-without-output\n\n";
+		cout << "   	              模式二速度建議調20以上 \n";
+		cout << "  模式三說明：沒有遊玩過程，僅在結束後輸出遊戲結果以增加速度。";
+		cout << "\n	              	   mode：";
+		int mode;
+		cin >> mode;
+		if(mode != 1 && mode != 2 && mode != 3){
+			break;
+		}
+		int speed;
+		if(mode == 2){
+		cout << "\n速度 ( 毫秒 / 一下)：";
+			cin >> speed; 
+		}
+		point = 0;
 		double start,end;
 		for (int x = 0; x < BORDER; x++) {
 	  		for (int y = 0; y < BORDER; y++) {
@@ -41,42 +75,103 @@ int main(){
 		newnum();
 		copy();
 		Align_display();
+		if(mode == 3){
+			cout << "\n執行中，請稍等...";
+		}
 		int keep;
 		int key;
 		start = clock();
-		while(key = getch()){	
-			if(key == DIRECTION){
-				key = getch();
-	            		copy();
-				switch(key){
-					case UP:
-						up();
+		if(mode == 1){
+			while(key = getch()){	
+				if(key == DIRECTION){
+					key = getch();
+		            		copy();
+					switch(key){
+						case UP:
+							up();
+							break;
+						case DOWN:
+							down();
+							break;
+						case RIGHT:
+							right();
+							break;
+						case LEFT:
+							left();
+							break;
+					}
+					Align_display();
+					
+					check = win();
+					if(check == 0){
+						winfin(start,end);
+						keep = restart();
 						break;
-					case DOWN:
-						down();
+					}else if(check == 1){
+						losefin(start,end);
+						keep = restart();
 						break;
-					case RIGHT:
-						right();
-						break;
-					case LEFT:
-						left();
-						break;
-				}
-				Align_display();
-				
-				check = win();
-				if(check == 0){
-					winfin(start,end);
-					keep = restart();
-					break;
-				}else if(check == 1){
-					losefin(start,end);
-					keep = restart();
-					break;
-				}
-				cout << "\n 分數：" << point; 
-			}	
+					}
+				}	
+			}
 		}
+		while(mode == 2){	
+			int way = rand() % 4;
+			Sleep(speed);			
+			switch(way){
+				case 0:
+					up();
+					break;
+				case 1:
+					down();
+					break;
+				case 2:
+					right();
+					break;
+				case 3:
+					left();
+					break;
+			}
+			Align_display();		
+			check = win();
+			if(check == 0){
+				winfin(start,end);
+				keep = restart();
+				break;
+			}else if(check == 1){
+				losefin(start,end);
+				keep = restart();
+				break;
+			} 
+		}
+		while(mode == 3){	
+			int way = rand() % 4;			
+			switch(way){
+				case 0:
+					up();
+					break;
+				case 1:
+					down();
+					break;
+				case 2:
+					right();
+					break;
+				case 3:
+					left();
+					break;
+			}
+			//Align_display();		
+			check = win();
+			if(check == 0){
+				winfin(start,end);
+				keep = restart();
+				break;
+			}else if(check == 1){
+				losefin(start,end);
+				keep = restart();
+				break;
+			} 
+		}	
 		if(!keep) break;
 	}
 	return 0;
@@ -107,12 +202,18 @@ void newnum() {
 
 void Align_display(){
 	system("cls");
-	for (int x = 0; x < BORDER; x++) {
-        for (int y = 0; y < BORDER; y++) {
-           	cout << setw(5) << block[x][y];
+	for (int x = 0; x <= BORDER * 4; x++) {
+        for (int y = 0; y <= BORDER * 4; y++) {
+			if(block[x][y] == 0){
+        		cout << setw(5) << "X";
+			}else{
+				cout << setw(5) << block[x][y];
+			}
+           	
         }
         cout << "\n\n";
     }
+    cout << "\n 分數：" << point;
 }
 void copy(){
 	for (int x = 0; x < BORDER; x++) {
@@ -334,20 +435,32 @@ int win(){
 }
 
 void winfin(double start,double end){
+	Align_display();
 	cout << "\n You Win\n Your grade is : " << point;
 	end = clock();
-	cout << "\n 花費時間：" <<  (end - start) / 1000 << " S"; 
+	int time = (end - start) / 1000;
+	cout << "\n 花費時間：" <<  time / 60 << " 分 " << time % 60 << " 秒"; 
+	bestpoint = max(bestpoint, point);
+	if(besttime[0] * 60 + besttime[1] > time){
+		besttime[0] = time / 60;
+		besttime[1] = time % 60;
+	}
 }
 
 void losefin(double start,double end){
+	Align_display();
 	cout << "\n You'er lose, keep working\n Your grade is : " << point;
 	end = clock();
-	cout << "\n 花費時間：" <<  (end - start) / 1000 << " S"; 
+	int time = (end - start) / 1000;
+	cout << "\n 花費時間：" <<  time / 60 << " 分 " << time % 60 << " 秒"; 
+	bestpoint = max(bestpoint, point);
 }
 
 bool restart(){
 	bool rst;
-	cout << "\n\n輸入0以結束，輸入1以繼續：";
+	cout << "\n";
+	system("PAUSE");
+	cout << "\n\n輸入 0 以結束，輸入 1 以繼續：";
 	cin >> rst;
 	return rst;
 }

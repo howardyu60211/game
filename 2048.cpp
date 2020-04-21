@@ -69,8 +69,8 @@ int main(){
 	  		for (int y = 0; y < BORDER; y++) {
 	            		block[x][y] = 0;
 	            		checkblock[x][y] = 0;
-	        }
-	    }
+	        	}
+		}
 		checkblock[0][0] = 1;
 		newnum();
 		copy();
@@ -101,7 +101,6 @@ int main(){
 							break;
 					}
 					Align_display();
-					
 					check = win();
 					if(check == 0){
 						winfin(start,end);
@@ -178,50 +177,49 @@ int main(){
 }
 
 void newnum() {
-    int check = 1;
-    if (check == 1){
-        srand((unsigned)time(NULL));
-        while(1){
-            int all = rand() % (BORDER * BORDER);
-            int x = all / BORDER;
-            int y = all % BORDER;
-            if (block[x][y] != 0) {
-                continue;
-            }else{
-            	int newadd = rand() % 10;
-            	if(newadd == 0){
-            		block[x][y] = BORDER;
+	int check = 1;
+    	if (check == 1){
+        	srand((unsigned)time(NULL));
+        	while(1){
+		    	int all = rand() % (BORDER * BORDER);
+		    	int x = all / BORDER;
+		    	int y = all % BORDER;
+		    	if (block[x][y] != 0) {
+				continue;
+		    	}else{
+				int newadd = rand() % 10;
+				if(newadd == 0){
+					block[x][y] = BORDER;
 				}else{
-                	block[x][y] = 2;
+					block[x][y] = 2;
 				}
-            }
-	break;
-        }
-    }
+		    	}
+			break;
+		}
+	}
 }
 
 void Align_display(){
 	system("cls");
-	for (int x = 0; x <= BORDER * 4; x++) {
-        for (int y = 0; y <= BORDER * 4; y++) {
+	for (int x = 0; x < BORDER; x++) {
+        	for (int y = 0; y < BORDER; y++) {
 			if(block[x][y] == 0){
-        		cout << setw(5) << "X";
+        			cout << setw(5) << "X";
 			}else{
 				cout << setw(5) << block[x][y];
-			}
-           	
-        }
-        cout << "\n\n";
-    }
-    cout << "\n 分數：" << point;
+			}  	
+        	}
+        	cout << "\n\n";
+    	}
+    	cout << "\n 分數：" << point;
 }
 void copy(){
 	for (int x = 0; x < BORDER; x++) {
-        for (int y = 0; y < BORDER; y++) {
-            checkblock[x][y] = block[x][y];
-            //cout << block[x][y];
-        }
-    }	
+        	for (int y = 0; y < BORDER; y++) {
+            		checkblock[x][y] = block[x][y];
+            		//cout << block[x][y];
+        	}
+    	}	
 }
 void up(){
 	int add = 0;
@@ -259,7 +257,7 @@ void up(){
 		for(int y = 0; y < BORDER; y++){
 			if(checkblock[x][y] != block[x][y]){
 				add += 1;
-	     		break;
+	     			break;
 			}	
 		}
 	}
@@ -303,7 +301,7 @@ void down(){
 		for(int y = 0; y < BORDER; y++){
 			if(checkblock[x][y] != block[x][y]){
 				add += 1;
-	     		break;
+	     			break;
 			}	
 		}
 	}
@@ -348,7 +346,7 @@ void right(){
 		for(int y = 0; y < BORDER; y++){
 			if(checkblock[x][y] != block[x][y]){
 				add += 1;
-	     		break;
+	     			break;
 			}	
 		}
 	}
@@ -393,7 +391,7 @@ void left(){
 		for(int y = 0; y < BORDER; y++){
 			if(checkblock[x][y] != block[x][y]){
 				add += 1;
-	     		break;
+	     			break;
 			}	
 		}
 	}
@@ -420,9 +418,9 @@ int win(){
 	for(int x = 0; x < BORDER; x++){
 		for(int y = 0; y < BORDER; y++){
 			if( x - 1 > 0 && block[x][y] == block[x - 1][y] ||
-				x + 1 < BORDER && block[x][y] == block[x + 1][y] ||
-				y + 1 < BORDER && block[x][y] == block[x][y + 1] ||
-				y - 1 > 0 && block[x][y] == block[x][y - 1]){
+			    	x + 1 < BORDER && block[x][y] == block[x + 1][y] ||
+			    	y + 1 < BORDER && block[x][y] == block[x][y + 1] ||
+			    	y - 1 > 0 && block[x][y] == block[x][y - 1]){
 				full = 0;
 				break;
 			}

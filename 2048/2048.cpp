@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <iomanip>
-#include <windows.h>
 #include <algorithm>
 #define UP 72
 #define LEFT 75
